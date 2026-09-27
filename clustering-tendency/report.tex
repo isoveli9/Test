@@ -39,7 +39,8 @@ own it shows only a weak clustering tendency. Component~1 is flat, with
 only random fluctuations, and shows no clustering tendency. Component~2 is
 clearly bimodal: about three quarters of the points lie around 0.25 and the
 rest around 0.75, separated by an almost empty gap at 0.5. It alone shows a
-strong clustering tendency with two groups.
+strong clustering tendency with two groups. Component~2 thus contributes
+most to the clustering tendency, component~0 some and component~1 nothing.
 
 \section{Scatter plots}
 
@@ -49,7 +50,7 @@ strong clustering tendency with two groups.
 \label{fig:scatter}
 \end{figure}
 
-Components~0 and~1 (Figure~\ref{fig:scatter}) show no groups: the density
+Components~0 and~1 (Figure~\ref{fig:scatter}) show no clustering tendency: the density
 varies only along component~0, in the same way for every value of
 component~1, so the two components appear independent.
 
@@ -63,7 +64,7 @@ lower two. The pair therefore has a clearly stronger clustering tendency
 than either component.
 
 Components~1 and~2 show two horizontal bands (component~2 $\approx0.25$ and
-$\approx0.75$) spread evenly over component~1, i.e.\ only the bimodality of
+$\approx0.75$) spread evenly over component~1, i.e.\ only the two groups of
 component~2 and no dependence on component~1.
 
 Component~1 is thus uniform noise, independent of the other components.
@@ -98,9 +99,12 @@ $E$ & 4.794 & 4.998 & 4.482 & 4.792 & 4.954 & 5.118 & 4.761 \\
 \end{tabular}
 \end{table}
 
-All values in Table~\ref{tab:entropies} lie between 4.482 and 5.118 (87 to
-99\,\% of $E_{\max}$). $E_{\{0,2\}}$ is clearly the lowest, so $\{0,2\}$ has
-the strongest clustering tendency. $E_{\{1\}}$ is within 1\,\% of
+All values in Table~\ref{tab:entropies} lie in the range 4.482--5.118
+(87--99\,\% of $E_{\max}$). A lower entropy means a less uniform, more
+concentrated distribution, so the order $E_{\{0,2\}}<E_{\{2\}}<E_{\{1,2\}}
+\approx E_{\{0,1,2\}}<E_{\{0\}}<E_{\{0,1\}}<E_{\{1\}}$ ranks the
+combinations from the strongest to the weakest clustering tendency, with
+$\{0,2\}$ clearly ahead. $E_{\{1\}}$ is within 1\,\% of
 $E_{\max}$ (practically uniform), and adding component~1 always increases
 the entropy (by 0.044 for $\{0\}$, 0.031 for $\{2\}$ and 0.312 for
 $\{0,2\}$) because, with $m$ fixed, an extra dimension lowers the
@@ -208,7 +212,7 @@ cells for $d=4$ and $2^{60}$ for $d=5$, which is impossible. Moreover, a
 $k$-dimensional grid with at least two ranges per dimension has at least
 $2^k$ cells, so the number of points needed grows exponentially and most
 cells become empty. In practice, $m$ is therefore chosen from the number of
-points (e.g.\ at least 5 to 10 points per cell) with $\lceil m^{1/k}\rceil$
+points (e.g.\ at least 5--10 points per cell) with $\lceil m^{1/k}\rceil$
 ranges per dimension, and entropies are compared relative to their
 maximum. Alternatively, the entropy can be computed from the
 one-dimensional distribution of pairwise distances, whose number of bins
