@@ -1,7 +1,6 @@
 \documentclass[a4paper,12pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern}
-\usepackage[english]{babel}
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{booktabs}
@@ -30,10 +29,9 @@ We used Python with NumPy for the computations and Matplotlib for the
 figures. The data file contains 1000 three-dimensional vectors with all
 values in $[0,1]$ (checked in the code). For the entropies, a subset of $k$
 dimensions was divided into $m=64$ equal grid cells by splitting each of
-its dimensions into $\varphi=64^{1/k}$ equal ranges (4, 8 and 64 ranges for
-$k=3$, 2 and 1); a value $x$ falls into range $\lfloor\varphi x\rfloor$, and
-$x=1$ into the last range. The greedy searches were simulated with the
-seven resulting entropies.
+its dimensions into $64^{1/k}$ equal ranges (4, 8 and 64 ranges for $k=3$,
+2 and 1; the last range includes the value 1). The greedy searches were
+simulated with the seven resulting entropies.
 
 \section{Histograms}
 
@@ -94,11 +92,9 @@ entropy (Aggarwal, Section~6.2.1.3, eq.~(6.2)) is
 \[
   E=-\sum_{i=1}^{m}\bigl[p_i\ln p_i+(1-p_i)\ln(1-p_i)\bigr],
 \]
-i.e.\ each cell is treated as an independent binary variable that is
-occupied with probability $p_i$ and empty with $1-p_i$; $0\ln0=0$. Since
-$m=64$ for every subset, all values share the same range: from 0 (all
-points in one cell) to $E_{\max}=\ln64-63\ln\frac{63}{64}\approx5.151$
-(all $p_i=1/64$).
+with $0\ln0=0$. Since $m=64$ for every subset, all values share the same
+range: from 0 (all points in one cell) to
+$E_{\max}=\ln64-63\ln\frac{63}{64}\approx5.151$ (all $p_i=1/64$).
 
 \begin{table}[!ht]
 \centering
@@ -117,17 +113,14 @@ All values in Table~\ref{tab:entropies} lie in a narrow range, 4.482--5.118
 (87--99\,\% of $E_{\max}$), but the differences are consistent.
 $E_{\{0,2\}}$ is clearly the lowest, so $\{0,2\}$ has the strongest
 clustering tendency. $E_{\{1\}}$ is within 1\,\% of $E_{\max}$
-(practically uniform), and adding component~1 always increases the
-entropy: by 0.044 for $\{0\}$, 0.031 for $\{2\}$ and 0.312 for $\{0,2\}$.
-With $m$ fixed, an extra dimension adds no cells but lowers the resolution
-of the others, and a uniform component only spreads the points evenly.
-Component~2 has the lowest single entropy (4.761), and adding it always
-decreases the entropy: by 0.472 for $\{0\}$, 0.326 for $\{1\}$ and 0.204
-for $\{0,1\}$. It is the strongest single contributor. Component~0 alone is
-moderate (4.954) but lowers the entropy of $\{2\}$ by 0.279, so it
-contributes mainly together with component~2. In the coarse
-$4\times4\times4$ grid, however, adding it to $\{1,2\}$ does not lower the
-entropy ($+0.002$, see Section~\ref{sec:analysis}).
+(practically uniform), and adding component~1 always increases the entropy
+(by 0.044 for $\{0\}$, 0.031 for $\{2\}$ and 0.312 for $\{0,2\}$): with $m$
+fixed, an extra dimension lowers the resolution of the others without
+adding structure. Component~2 has the lowest single entropy (4.761), and
+adding it always decreases the entropy (by 0.472 for $\{0\}$, 0.326 for
+$\{1\}$ and 0.204 for $\{0,1\}$), so it is the strongest single
+contributor. Component~0 alone is moderate (4.954) but lowers the entropy
+of $\{2\}$ by 0.279, so it contributes mainly together with component~2.
 
 \section{Greedy backward selection}
 
@@ -184,7 +177,7 @@ increases it by 0.031. In stage~3, adding component~1 would increase the
 entropy by 0.312, so the search stops at $\{0,2\}$, the same result as
 backward selection.
 
-\section{Analysis}\label{sec:analysis}
+\section{Analysis}
 
 The three approaches agree. Visually, the clusters lie in the plane of
 components~0 and~2 and component~1 is uniform noise. The entropies confirm
@@ -201,46 +194,41 @@ Two limitations are visible. First, with $m$ fixed, the resolution per
 dimension falls with the dimensionality (64, 8 and 4 ranges). In the
 $4\times4\times4$ grid, the range boundaries 0.25, 0.5 and 0.75 cut through
 the cluster centres, so $E_{\{0,1,2\}}$ is not lower than $E_{\{1,2\}}$
-although the full data contain all three clusters. With less clear data, a
-decision made on such a coarse grid could drop a useful component, and
-forward selection could miss components that are informative only
-jointly. Second, entropy measures non-uniformity rather than cluster
-separation: component~0 has a clearly lower entropy than the uniform
-component~1 although its histogram shows no separated groups. The visual
-inspection is needed to interpret the entropies.
+($+0.002$) although the full data contain all three clusters. Second,
+entropy measures non-uniformity rather than cluster separation:
+component~0 has a clearly lower entropy than the uniform component~1
+although its histogram shows no separated groups, so the visual inspection
+is needed to interpret the entropies.
 
 \section{Why 64 bins?}
 
 $64=4^3=8^2=64^1$, so uniform grids with equally many ranges per dimension
 give exactly $m=64$ cells for every one-, two- and three-dimensional
-subset. The entropy depends on $m$ (its maximum is determined by $m$), so
-$m$ should be the same for all compared subsets. In general this is only
-approximately possible, with $\lceil m^{1/k}\rceil$ ranges per dimension.
-Equal $m$ matters especially for the greedy searches, whose stopping
-decisions compare subsets of different dimensionality. In addition,
-$1000/64\approx15.6$ points per cell suffice to estimate the $p_i$, and
-because the range widths 1/4, 1/8 and 1/64 are powers of two, the bin edges
-are exact in binary floating point.
+subset. Because the entropy depends on $m$ (its maximum is determined by
+$m$), $m$ should be the same for all compared subsets, which in general is
+only approximately possible with $\lceil m^{1/k}\rceil$ ranges per
+dimension. Equal $m$ matters especially for the greedy searches, whose
+stopping decisions compare subsets of different dimensionality. In
+addition, $1000/64\approx15.6$ points per cell suffice to estimate the
+$p_i$.
 
 Other values with the same property are the sixth powers 1, 64, 729,
-4096,~\dots\ With $m=1$ every entropy is 0. $m=729=9^3=27^2$ leaves only 1.4
-points per cell (even for uniform data about a quarter of the cells would
-be empty), and $m=4096$ exceeds the number of points. So 64 is the only
-practical choice for these data. If only pairs were compared, any square
-(e.g.\ 16 or 100) would do; for triples, any cube (e.g.\ 27 or 125).
+4096,~\dots\ With $m=1$ every entropy is 0, $m=729=9^3=27^2$ leaves only
+1.4 points per cell (even for uniform data about a quarter of the cells
+would be empty), and $m=4096$ exceeds the number of points, so 64 is the
+only practical choice for these data.
 
 With $d$-dimensional data, an equal $m$ for all subset sizes $1,\dots,d$
 requires $m=q^{\operatorname{lcm}(1,\dots,d)}$, i.e.\ at least $2^{12}=4096$
 cells for $d=4$ and $2^{60}$ for $d=5$, which is impossible. Moreover, a
 $k$-dimensional grid with at least two ranges per dimension has at least
 $2^k$ cells, so the number of points needed grows exponentially and most
-cells become empty. In practice, $m$ is chosen from the number of points
-(e.g.\ at least 5--10 points per cell), each dimension gets
-$\lceil m^{1/k}\rceil$ ranges, entropies are compared relative to their
-maximum, and the search is limited to low-dimensional subsets. The
-alternative is to compute the entropy from the one-dimensional distribution
-of pairwise distances, whose number of bins does not depend on the
-dimensionality.
+cells become empty. In practice, $m$ is therefore chosen from the number of
+points (e.g.\ at least 5--10 points per cell) with $\lceil m^{1/k}\rceil$
+ranges per dimension, and entropies are compared relative to their
+maximum; alternatively, the entropy is computed from the one-dimensional
+distribution of pairwise distances, whose number of bins does not depend
+on the dimensionality.
 
 \section{Conclusions}
 
