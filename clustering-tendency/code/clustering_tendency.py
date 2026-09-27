@@ -10,7 +10,8 @@ fig, axes = plt.subplots(3, 1, figsize=(7, 4.2), sharex=True, sharey=True,
                          layout="constrained")
 for j, ax in enumerate(axes):
     ax.hist(X[:, j], bins=64, range=(0, 1))
-    ax.text(0.99, 0.9, f"component {j}", transform=ax.transAxes, ha="right", va="top")
+    ax.text(0.99, 0.9, f"component {j}", transform=ax.transAxes,
+            ha="right", va="top")
     ax.set(xlim=(0, 1), ylabel="count")
 axes[2].set_xlabel("value")
 fig.savefig("figures/histograms.pdf")
@@ -25,7 +26,8 @@ fig.savefig("figures/scatter.pdf")
 
 def entropy(dims, m=64):
     k = len(dims)
-    counts, _ = np.histogramdd(X[:, dims], bins=round(m ** (1 / k)), range=[(0, 1)] * k)
+    counts, _ = np.histogramdd(X[:, dims], bins=round(m ** (1 / k)),
+                               range=[(0, 1)] * k)
     p = counts.ravel() / len(X)
     q = np.concatenate([p, 1 - p])
     q = q[q > 0]
