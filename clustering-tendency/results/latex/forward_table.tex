@@ -1,0 +1,14 @@
+\begin{tabular}{cllrrl}
+\toprule
+Stage & Current set ($E$) & Candidate set & $E$ & $\Delta E$ & Decision \\
+\midrule
+1 & $\emptyset$ & $\{0\}$ (add 0) & 4.954 & -- &  \\
+& & $\{1\}$ (add 1) & 5.118 & -- &  \\
+& & $\{2\}$ (add 2) & \textbf{4.761} & -- & selected \\
+\midrule
+2 & $\{2\}$ (4.761) & $\{0,2\}$ (add 0) & \textbf{4.482} & $-0.279$ & selected \\
+& & $\{1,2\}$ (add 1) & 4.792 & $+0.031$ &  \\
+\midrule
+3 & $\{0,2\}$ (4.482) & $\{0,1,2\}$ (add 1) & \textbf{4.794} & $+0.312$ & stop: $E$ would increase \\
+\bottomrule
+\end{tabular}
