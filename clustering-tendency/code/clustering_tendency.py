@@ -1,5 +1,3 @@
-"""CS-E4650 homework: clustering tendency and entropy-based measures.
-Run in the project directory; saves the figures and prints the entropies."""
 from itertools import combinations
 
 import matplotlib.pyplot as plt
@@ -8,7 +6,6 @@ import numpy as np
 X = np.loadtxt("data/clustering-tendency.csv", delimiter=",")
 assert X.shape == (1000, 3) and X.min() >= 0 and X.max() <= 1
 
-# histograms (64 bins)
 fig, axes = plt.subplots(3, 1, figsize=(7, 4.2), sharex=True, sharey=True,
                          layout="constrained")
 for j, ax in enumerate(axes):
@@ -18,7 +15,6 @@ for j, ax in enumerate(axes):
 axes[2].set_xlabel("value")
 fig.savefig("figures/histograms.pdf")
 
-# scatter plots (equal aspect ratio)
 fig, axes = plt.subplots(1, 3, figsize=(7.5, 2.7), layout="constrained")
 for ax, (i, j) in zip(axes, combinations(range(3), 2)):
     ax.scatter(X[:, i], X[:, j], s=3, alpha=0.5, linewidths=0)
@@ -28,7 +24,6 @@ fig.savefig("figures/scatter.pdf")
 
 
 def entropy(dims, m=64):
-    """Aggarwal eq. (6.2) on a uniform grid of m cells in [0,1]^k; 0 ln 0 = 0."""
     k = len(dims)
     counts, _ = np.histogramdd(X[:, dims], bins=round(m ** (1 / k)), range=[(0, 1)] * k)
     p = counts.ravel() / len(X)
