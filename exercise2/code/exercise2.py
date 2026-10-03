@@ -8,31 +8,19 @@ A[np.arange(6)[:, None], np.argsort(D)[:, 1:3]] = True
 W = np.where(A | A.T, 1 - D / np.sqrt(53), 0)
 L = np.diag(W.sum(1)) - W
 lam, V = np.linalg.eigh(L)
-print(L.round(3), lam.round(3), V.round(3), sep="\n")
+print(W.round(3), L.round(3), lam.round(3), V.round(3), sep="\n")
 
-pca = np.array([-3.468, -1.746, -0.025, -0.306, 1.746, 3.799])
-fig, ax = plt.subplot_mosaic([["a", "b"], ["a", "c"]], figsize=(7.5, 2.8),
-                             width_ratios=[1.2, 1], layout="constrained")
-for i, j in zip(*np.nonzero(np.triu(W))):
-    ax["a"].plot(*P[[i, j]].T, color="0.8", zorder=0)
+fig, ax = plt.subplots(figsize=(4.5, 2.4), layout="constrained")
+for f, marker in ((0, "o"), (3, "s")):
+    ax.scatter(*P[f:f + 3].T, marker=marker)
+for i, p in enumerate(P, 1):
+    ax.annotate(i, p, xytext=(-3, 5), textcoords="offset points")
 for v, s, name in (((0.944, -0.331), 2, "$v_1$"),
                    ((0.331, 0.944), 1, "$v_2$")):
-    ax["a"].annotate(name, P.mean(0), P.mean(0) + s * np.array(v),
-                     arrowprops={"arrowstyle": "<-"})
-panels = (("a", P, "(a) data"),
-          ("b", np.c_[V[:, 1], np.zeros(6)], "(b) spectral embedding"),
-          ("c", np.c_[pca, np.zeros(6)], "(c) PCA"))
-for k, X, title in panels:
-    for f, marker in ((0, "o"), (3, "s")):
-        ax[k].scatter(*X[f:f + 3].T, marker=marker)
-    for i, p in enumerate(X, 1):
-        ax[k].annotate(i, p, xytext=(-3, 5 + 7 * (i % 3) * (k != "a")),
-                       textcoords="offset points")
-    ax[k].set_title(title)
-ax["a"].set(aspect="equal", xlabel="x", ylabel="y")
-ax["b"].set_yticks([])
-ax["c"].set_yticks([])
-fig.savefig("figures/embedding.pdf")
+    ax.annotate(name, P.mean(0), P.mean(0) + s * np.array(v),
+                arrowprops={"arrowstyle": "<-"})
+ax.set(aspect="equal", xlabel="x", ylabel="y")
+fig.savefig("figures/pca.pdf")
 
 x = np.array([1, 2, 3, 4, 8, 10, 11, 100])
 for rep, inits in ((np.mean, [(8, 11), (1, 8)]),
